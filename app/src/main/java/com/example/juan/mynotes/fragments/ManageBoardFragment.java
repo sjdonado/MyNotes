@@ -2,6 +2,8 @@ package com.example.juan.mynotes.fragments;
 
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import com.example.juan.mynotes.R;
 import com.example.juan.mynotes.adapters.BoardsAdapter;
 import com.example.juan.mynotes.models.Board;
+import com.example.juan.mynotes.models.Crud;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -28,6 +31,7 @@ public class ManageBoardFragment extends Fragment implements RealmChangeListener
     private BoardsAdapter adapter;
     private RealmResults<Board> boards;
     private RecyclerView.LayoutManager layoutManager;
+    private FloatingActionButton fab_add_board;
 
     public ManageBoardFragment() {
         // Required empty public constructor
@@ -58,11 +62,21 @@ public class ManageBoardFragment extends Fragment implements RealmChangeListener
         adapter = new BoardsAdapter(boards, R.layout.recycler_view_board_item, new BoardsAdapter.OnButtonClickListener() {
             @Override
             public void onButtonClick(Board board, int position) {
-                deleteBoard(board);
+                Crud.deleteBoard(realm, board);
             }
         });
 
         recycler.setAdapter(adapter);
+
+        getActivity().setTitle("Edit Boards");
+
+        fab_add_board = (FloatingActionButton) view.findViewById(R.id.fab_add_board);
+        fab_add_board.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Crud.createNewBoard(realm, "Test");
+            }
+        });
 
         return view;
     }
@@ -72,9 +86,4 @@ public class ManageBoardFragment extends Fragment implements RealmChangeListener
         adapter.notifyDataSetChanged();
     }
 
-    private void deleteBoard(Board board) {
-        realm.beginTransaction();
-        board.deleteFromRealm();
-        realm.commitTransaction();
-    }
 }

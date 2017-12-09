@@ -3,29 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single"
-        android:id="@+id/menuBoards">
-        <item
-            android:id="@+id/main_board"
-            android:icon="@drawable/ic_book_black_24dp"
-            android:title="Main Board" />
+    <group android:id="@+id/menuBoards"/>
+
+    <group android:orderInCategory="1">
         <item
             android:id="@+id/edit_boards"
             android:icon="@drawable/ic_view_agenda_black_24dp"
             android:title="Edit Boards" />
+        <item
+            android:id="@+id/backup"
+            android:icon="@drawable/ic_backup_black_24dp"
+            android:title="Backup" />
+        <item
+            android:id="@+id/settings_user"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="Settings" />
     </group>
-
-    <item android:title="Account">
-        <menu>
-            <item
-                android:id="@+id/backup"
-                android:icon="@drawable/ic_backup_black_24dp"
-                android:title="Backup" />
-            <item
-                android:id="@+id/settings_user"
-                android:icon="@drawable/ic_settings_black_24dp"
-                android:title="Settings" />
-        </menu>
-    </item>
 
 </menu>

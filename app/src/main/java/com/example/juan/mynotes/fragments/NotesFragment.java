@@ -5,17 +5,22 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.juan.mynotes.R;
+import com.example.juan.mynotes.models.Board;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class NotesFragment extends Fragment {
 
+    private int id;
+    private Board board;
 
     public NotesFragment() {
         // Required empty public constructor
@@ -35,7 +40,14 @@ public class NotesFragment extends Fragment {
                         .setAction("Action", null).show();
             }
         });
-        getActivity().setTitle("Main Board");
+
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            id = bundle.getInt("id");
+            board = (Board) bundle.getSerializable("board");
+            getActivity().setTitle(board.getTitle());
+        }
+
         return view;
     }
 

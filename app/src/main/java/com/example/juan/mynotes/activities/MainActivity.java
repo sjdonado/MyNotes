@@ -2,7 +2,6 @@ package com.example.juan.mynotes.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,6 +14,7 @@ import com.example.juan.mynotes.R;
 import com.example.juan.mynotes.fragments.ManageBoardFragment;
 import com.example.juan.mynotes.fragments.NotesFragment;
 import com.example.juan.mynotes.models.Board;
+import com.example.juan.mynotes.models.Crud;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -23,12 +23,11 @@ import io.realm.RealmResults;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, RealmChangeListener<RealmResults<Board>> {
 
-    private NotesFragment mainFragment;
     private Realm realm;
     private RealmResults<Board> boards;
     private Menu menu;
     private ManageBoardFragment manageBoardFragment;
-    private int id = Menu.FIRST;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,26 +43,30 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         menu = navigationView.getMenu();
 
         realm = Realm.getDefaultInstance();
 
-        createNewBoard("Main Board");
-
         boards = realm.where(Board.class).findAll();
         boards.addChangeListener(this);
 
-        setMenuBoards(boards);
+        if(boards.isEmpty()) Crud.createNewBoard(realm, "Main Board");
 
-        // Set main fragment
-        if(savedInstanceState != null) return;
-        mainFragment = new NotesFragment();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragments_container, mainFragment)
-                .commit();
+        // Instance fragments
+        manageBoardFragment = new ManageBoardFragment();
+
+//        if(savedInstanceState == null){
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.fragments_container, notesFragment)
+//                    .commit();
+//        }else{
+//            return;
+//        }
+
+        if (savedInstanceState != null) return;
 
     }
 
@@ -103,14 +106,25 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        switch (item.getItemId()){
-            case R.id.edit_boards:
-                manageBoardFragment = new ManageBoardFragment();
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragments_container, manageBoardFragment)
-                        .addToBackStack(null)
-                        .commit();
-                break;
+        int id = item.getItemId();
+        if(boards.get(id) != null){
+            Bundle bundle = new Bundle();
+            NotesFragment notesFragment = new NotesFragment();
+            bundle.putInt("id", id);
+            bundle.putSerializable("board", boards.get(id));
+            notesFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragments_container, notesFragment)
+                    .commit();
+        }else{
+            switch (id){
+                case R.id.edit_boards:
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragments_container, manageBoardFragment)
+                            .addToBackStack(null)
+                            .commit();
+                    break;
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -118,20 +132,26 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void setMenuBoards(RealmResults<Board> boards){
-        for(Board board : boards){
-            menu.add(R.id.menuBoards, id++, Menu.FIRST, board.getTitle()).setIcon(R.drawable.ic_book_black_24dp);
+    public void setMenu(RealmResults<Board> boards){
+        menu.removeGroup(R.id.menuBoards);
+        for(int i = 0; i < boards.size(); i++){
+            menu.add(R.id.menuBoards, i, 0, boards.get(i).getTitle()).setIcon(R.drawable.ic_book_black_24dp);
         }
+        menu.setGroupCheckable(R.id.menuBoards, true, false);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        setMenu(boards);
+        MenuItem menuItem = (MenuItem)navigationView.getMenu().findItem(0);
+        menuItem.setChecked(true);
+        onNavigationItemSelected(menuItem);
+        return true;
     }
 
     @Override
     public void onChange(RealmResults<Board> boards) {
-        setMenuBoards(boards);
+        setMenu(boards);
     }
 
-    private void createNewBoard(String title) {
-        realm.beginTransaction();
-        realm.copyToRealm(new Board(title));
-        realm.commitTransaction();
-    }
 }
