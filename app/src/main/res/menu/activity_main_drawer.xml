@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"
+        android:id="@+id/menuBoards">
         <item
             android:id="@+id/main_board"
             android:icon="@drawable/ic_book_black_24dp"

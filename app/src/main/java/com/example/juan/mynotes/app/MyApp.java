@@ -2,6 +2,9 @@ package com.example.juan.mynotes.app;
 
 import android.app.Application;
 
+import com.example.juan.mynotes.models.Board;
+import com.example.juan.mynotes.models.Note;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.realm.Realm;
@@ -31,7 +34,9 @@ public class MyApp extends Application {
                 .build());
         // Set realm instance
         realm = Realm.getDefaultInstance();
-
+        idBoard = getIdByTable(realm, Board.class);
+        idNote = getIdByTable(realm, Note.class);
+        realm.close();
     }
 
     private <T extends RealmObject> AtomicInteger getIdByTable(Realm realm, Class<T> anyClass){

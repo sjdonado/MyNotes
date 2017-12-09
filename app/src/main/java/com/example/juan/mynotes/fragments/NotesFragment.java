@@ -35,6 +35,7 @@ public class NotesFragment extends Fragment {
                         .setAction("Action", null).show();
             }
         });
+        getActivity().setTitle("Main Board");
         return view;
     }
 
