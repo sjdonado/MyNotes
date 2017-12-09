@@ -8,9 +8,18 @@ import io.realm.Realm;
 
 public class Crud {
 
-    public static void createNewBoard(Realm realm, String title) {
+    //** CRUD Actions **/
+    public static void createNewBoard(Realm realm, String boardName) {
         realm.beginTransaction();
-        realm.copyToRealm(new Board(title));
+        Board board = new Board(boardName);
+        realm.copyToRealm(board);
+        realm.commitTransaction();
+    }
+
+    public static void editBoard(Realm realm, String newName, Board board) {
+        realm.beginTransaction();
+        board.setTitle(newName);
+        realm.copyToRealmOrUpdate(board);
         realm.commitTransaction();
     }
 
@@ -19,4 +28,11 @@ public class Crud {
         board.deleteFromRealm();
         realm.commitTransaction();
     }
+
+    public static void deleteAll(Realm realm) {
+        realm.beginTransaction();
+        realm.deleteAll();
+        realm.commitTransaction();
+    }
+
 }

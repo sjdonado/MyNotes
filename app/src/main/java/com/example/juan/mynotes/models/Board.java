@@ -2,6 +2,8 @@ package com.example.juan.mynotes.models;
 
 import com.example.juan.mynotes.app.MyApp;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import io.realm.RealmList;
@@ -48,8 +50,9 @@ public class Board extends RealmObject {
         return notes;
     }
     
-    public Date getCreatedAt() {
-        return createdAt;
+    public String getCreatedAt() {
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        return df.format(createdAt);
     }
 
 }

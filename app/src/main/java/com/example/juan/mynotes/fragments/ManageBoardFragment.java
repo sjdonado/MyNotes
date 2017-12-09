@@ -1,10 +1,12 @@
 package com.example.juan.mynotes.fragments;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,7 +44,7 @@ public class ManageBoardFragment extends Fragment implements RealmChangeListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_board, container, false);
+        final View view = inflater.inflate(R.layout.fragment_board, container, false);
 
         // Set realm instance
         realm = Realm.getDefaultInstance();
@@ -61,8 +63,21 @@ public class ManageBoardFragment extends Fragment implements RealmChangeListener
         // Instance board adapter
         adapter = new BoardsAdapter(boards, R.layout.recycler_view_board_item, new BoardsAdapter.OnButtonClickListener() {
             @Override
-            public void onButtonClick(Board board, int position) {
-                Crud.deleteBoard(realm, board);
+            public void onButtonClick(final Board board, int position) {
+                AlertDialog dialog = new AlertDialog.Builder(getContext())
+                        .setTitle(getResources().getString(R.string.deleteBoardTitle))
+                        .setMessage("Title: " + board.getTitle() +
+                                "\nNotes: " + board.getNotes().size() +
+                                "\nCreated at: " + board.getCreatedAt())
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Crud.deleteBoard(realm, board);
+                                Snackbar.make(view, "It has been deleted successfully", Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null).show();
+                            }
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
             }
         });
 
@@ -78,12 +93,26 @@ public class ManageBoardFragment extends Fragment implements RealmChangeListener
             }
         });
 
+        setHideShowFAB(fab_add_board);
+
         return view;
     }
 
     @Override
     public void onChange(RealmResults<Board> boards) {
         adapter.notifyDataSetChanged();
+    }
+
+    private void setHideShowFAB(final FloatingActionButton fab) {
+        recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0)
+                    fab.hide();
+                else if (dy < 0)
+                    fab.show();
+            }
+        });
     }
 
 }
