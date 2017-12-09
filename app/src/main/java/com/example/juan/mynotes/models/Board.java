@@ -2,7 +2,6 @@ package com.example.juan.mynotes.models;
 
 import com.example.juan.mynotes.app.MyApp;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import io.realm.RealmList;
@@ -14,7 +13,7 @@ import io.realm.annotations.Required;
  * Created by juan on 8/12/17.
  */
 
-public class Board extends RealmObject implements Serializable {
+public class Board extends RealmObject {
 
     @PrimaryKey
     private int id;

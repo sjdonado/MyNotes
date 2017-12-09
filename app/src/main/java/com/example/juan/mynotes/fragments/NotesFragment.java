@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.juan.mynotes.R;
 import com.example.juan.mynotes.models.Board;
+import com.google.gson.Gson;
 
 
 /**
@@ -44,7 +45,7 @@ public class NotesFragment extends Fragment {
         Bundle bundle = getArguments();
         if(bundle != null){
             id = bundle.getInt("id");
-            board = (Board) bundle.getSerializable("board");
+            board = new Gson().fromJson(bundle.getString("board"), Board.class);
             getActivity().setTitle(board.getTitle());
         }
 

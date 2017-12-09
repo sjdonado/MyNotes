@@ -7,6 +7,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -15,6 +16,7 @@ import com.example.juan.mynotes.fragments.ManageBoardFragment;
 import com.example.juan.mynotes.fragments.NotesFragment;
 import com.example.juan.mynotes.models.Board;
 import com.example.juan.mynotes.models.Crud;
+import com.google.gson.Gson;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -107,24 +109,24 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        if(boards.get(id) != null){
-            Bundle bundle = new Bundle();
-            NotesFragment notesFragment = new NotesFragment();
-            bundle.putInt("id", id);
-            bundle.putSerializable("board", boards.get(id));
-            notesFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragments_container, notesFragment)
-                    .commit();
-        }else{
-            switch (id){
-                case R.id.edit_boards:
+        switch (id){
+            case R.id.edit_boards:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragments_container, manageBoardFragment)
+                        .commit();
+                break;
+            default:
+                if(boards.get(id) != null){
+                    Bundle bundle = new Bundle();
+                    NotesFragment notesFragment = new NotesFragment();
+                    bundle.putInt("id", id);
+                    bundle.putString("board", new Gson().toJson(realm.copyFromRealm(boards.get(id))));
+                    notesFragment.setArguments(bundle);
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragments_container, manageBoardFragment)
-                            .addToBackStack(null)
+                            .replace(R.id.fragments_container, notesFragment)
                             .commit();
                     break;
-            }
+                }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
