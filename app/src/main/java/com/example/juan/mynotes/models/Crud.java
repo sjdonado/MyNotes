@@ -63,9 +63,9 @@ public class Crud {
         return board;
     }
 
-    public static Board deleteNote(Realm realm, Board board, int position){
+    public static Board deleteNote(Realm realm, Board board, Note note){
         realm.beginTransaction();
-        board.getNotes().remove(position);
+        board.getNotes().remove(note);
         realm.copyToRealmOrUpdate(board);
         realm.commitTransaction();
         return board;
