@@ -7,16 +7,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.juan.mynotes.R;
-import com.example.juan.mynotes.fragments.ManageBoardFragment;
+import com.example.juan.mynotes.fragments.BoardsFragment;
 import com.example.juan.mynotes.fragments.NotesFragment;
 import com.example.juan.mynotes.models.Board;
 import com.example.juan.mynotes.models.Crud;
-import com.google.gson.Gson;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -28,7 +26,7 @@ public class MainActivity extends AppCompatActivity
     private Realm realm;
     private RealmResults<Board> boards;
     private Menu menu;
-    private ManageBoardFragment manageBoardFragment;
+    private BoardsFragment boardsFragment;
     private NavigationView navigationView;
 
     @Override
@@ -58,7 +56,7 @@ public class MainActivity extends AppCompatActivity
         if(boards.isEmpty()) Crud.createNewBoard(realm, "Main Board");
 
         // Instance fragments
-        manageBoardFragment = new ManageBoardFragment();
+        boardsFragment = new BoardsFragment();
 
         if (savedInstanceState != null) return;
 
@@ -105,7 +103,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.edit_boards:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragments_container, manageBoardFragment)
+                        .replace(R.id.fragments_container, boardsFragment)
                         .commit();
                 break;
             case R.id.backup:

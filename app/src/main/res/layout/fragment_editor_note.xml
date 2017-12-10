@@ -16,14 +16,14 @@
         <EditText
             android:id="@+id/new_note_title"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="10dp"
-            android:layout_weight="0.15"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
             android:background="@android:color/transparent"
+            android:gravity="left|center_vertical"
             android:hint="Title"
             android:inputType="textCapSentences"
-            android:textSize="20dp"
             android:textColor="@color/colorPrimaryText"
+            android:textSize="@dimen/text_size_primary"
             android:textStyle="bold" />
 
         <View
@@ -35,14 +35,15 @@
             android:id="@+id/new_note_content"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_margin="10dp"
+            android:layout_margin="@dimen/activity_horizontal_margin"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:gravity="top"
             android:hint="Note"
-            android:textColor="@color/colorSecondaryText"
             android:inputType="textCapSentences|textMultiLine"
-            android:maxLines="20"/>
+            android:maxLines="20"
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="@dimen/text_size_secondary" />
 
         <View
             android:layout_width="match_parent"

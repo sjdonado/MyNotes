@@ -7,4 +7,8 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="recycler_view_margin">8dp</dimen>
     <dimen name="card_view_corner_radius">5dp</dimen>
+
+    <!-- TEXT -->
+    <dimen name="text_size_primary">20dp</dimen>
+    <dimen name="text_size_secondary">15dp</dimen>
 </resources>

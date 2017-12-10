@@ -30,7 +30,7 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ManageBoardFragment extends Fragment implements RealmChangeListener<RealmResults<Board>>{
+public class BoardsFragment extends Fragment implements RealmChangeListener<RealmResults<Board>>{
 
     private Realm realm;
     private RecyclerView recycler;
@@ -39,7 +39,7 @@ public class ManageBoardFragment extends Fragment implements RealmChangeListener
     private RecyclerView.LayoutManager layoutManager;
     private FloatingActionButton fab_add_board;
 
-    public ManageBoardFragment() {
+    public BoardsFragment() {
         // Required empty public constructor
     }
 
