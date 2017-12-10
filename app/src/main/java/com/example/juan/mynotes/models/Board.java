@@ -49,6 +49,8 @@ public class Board extends RealmObject {
     public RealmList<Note> getNotes() {
         return notes;
     }
+
+    public String getNotesSize(){return notes.size() + "";}
     
     public String getCreatedAt() {
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");

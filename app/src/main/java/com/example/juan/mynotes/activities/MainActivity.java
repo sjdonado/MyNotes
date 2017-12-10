@@ -60,14 +60,6 @@ public class MainActivity extends AppCompatActivity
         // Instance fragments
         manageBoardFragment = new ManageBoardFragment();
 
-//        if(savedInstanceState == null){
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.fragments_container, notesFragment)
-//                    .commit();
-//        }else{
-//            return;
-//        }
-
         if (savedInstanceState != null) return;
 
     }
@@ -111,7 +103,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         switch (id){
             case R.id.edit_boards:
-                getSupportFragmentManager().beginTransaction()
+                getSupportFragmentManager()
+                        .beginTransaction()
                         .replace(R.id.fragments_container, manageBoardFragment)
                         .commit();
                 break;
@@ -122,7 +115,8 @@ public class MainActivity extends AppCompatActivity
                     bundle.putInt("id", id);
                     bundle.putString("board", new Gson().toJson(realm.copyFromRealm(boards.get(id))));
                     notesFragment.setArguments(bundle);
-                    getSupportFragmentManager().beginTransaction()
+                    getSupportFragmentManager()
+                            .beginTransaction()
                             .replace(R.id.fragments_container, notesFragment)
                             .commit();
                     break;
@@ -139,15 +133,13 @@ public class MainActivity extends AppCompatActivity
         for(int i = 0; i < boards.size(); i++){
             menu.add(R.id.menuBoards, i, 0, boards.get(i).getTitle()).setIcon(R.drawable.ic_book_black_24dp);
         }
-        menu.setGroupCheckable(R.id.menuBoards, true, false);
+        menu.setGroupCheckable(R.id.menuBoards, true, true);
+        menu.setGroupCheckable(R.id.optionsBoards, true, true);
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         setMenu(boards);
-        MenuItem menuItem = (MenuItem)navigationView.getMenu().findItem(0);
-        menuItem.setChecked(true);
-        onNavigationItemSelected(menuItem);
         return true;
     }
 

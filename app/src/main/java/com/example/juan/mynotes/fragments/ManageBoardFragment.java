@@ -13,11 +13,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.juan.mynotes.R;
 import com.example.juan.mynotes.adapters.BoardsAdapter;
 import com.example.juan.mynotes.models.Board;
 import com.example.juan.mynotes.models.Crud;
+
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -41,7 +45,7 @@ public class ManageBoardFragment extends Fragment implements RealmChangeListener
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_board, container, false);
@@ -63,21 +67,54 @@ public class ManageBoardFragment extends Fragment implements RealmChangeListener
         // Instance board adapter
         adapter = new BoardsAdapter(boards, R.layout.recycler_view_board_item, new BoardsAdapter.OnButtonClickListener() {
             @Override
-            public void onButtonClick(final Board board, int position) {
+            public void onButtonClick(final Board board) {
+                View dialog_view = inflater.inflate(R.layout.dialog_delete_board, null);
+
+                TextView title = (TextView) dialog_view.findViewById(R.id.dialog_delete_title_board);
+                title.setText(getResources().getText(R.string.delete_board_title_board) + " " + board.getTitle());
+                TextView notesCount = (TextView) dialog_view.findViewById(R.id.dialog_delete_notes_count);
+                notesCount.setText(getResources().getText(R.string.delete_board_count_notes) + " " + board.getNotesSize());
+                TextView date = (TextView) dialog_view.findViewById(R.id.dialog_delete_date);
+                date.setText(getResources().getText(R.string.delete_board_date) + " " + board.getCreatedAt());
+
                 AlertDialog dialog = new AlertDialog.Builder(getContext())
-                        .setTitle(getResources().getString(R.string.deleteBoardTitle))
-                        .setMessage("Title: " + board.getTitle() +
-                                "\nNotes: " + board.getNotes().size() +
-                                "\nCreated at: " + board.getCreatedAt())
-                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        .setTitle(getResources().getString(R.string.delete_board_title))
+                        .setView(dialog_view)
+                        .setPositiveButton(getResources().getText(R.string.delete), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 Crud.deleteBoard(realm, board);
-                                Snackbar.make(view, "It has been deleted successfully", Snackbar.LENGTH_LONG)
+                                Snackbar.make(view, getResources().getText(R.string.deleted_info), Snackbar.LENGTH_LONG)
                                         .setAction("Action", null).show();
                             }
                         })
-                        .setNegativeButton("Cancel", null)
+                        .setNegativeButton(getResources().getText(R.string.cancel), null)
                         .show();
+            }
+        }, new BoardsAdapter.OnButtonClickListener() {
+            @Override
+            public void onButtonClick(final Board board) {
+                View edit_view = inflater.inflate(R.layout.dialog_edit_board, null);
+                final EditText title_board = (EditText) edit_view.findViewById(R.id.edit_title_board);
+                title_board.setText(board.getTitle());
+                title_board.setSelection(title_board.getText().toString().length());
+                AlertDialog dialog = new AlertDialog.Builder(getContext())
+                        .setTitle(getResources().getString(R.string.edit_board_title))
+                        .setView(edit_view)
+                        .setPositiveButton(getResources().getText(R.string.update), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                if(Crud.editBoard(realm, title_board.getText().toString(), board)){
+                                    Snackbar.make(view, getResources().getText(R.string.edited_info), Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                }else{
+                                    Snackbar.make(view, getResources().getText(R.string.error_info), Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                }
+                            }
+                        })
+                        .setNegativeButton(getResources().getText(R.string.cancel), null)
+                        .create();
+                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                dialog.show();
             }
         });
 
@@ -88,8 +125,28 @@ public class ManageBoardFragment extends Fragment implements RealmChangeListener
         fab_add_board = (FloatingActionButton) view.findViewById(R.id.fab_add_board);
         fab_add_board.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Crud.createNewBoard(realm, "Test");
+            public void onClick(final View view) {
+                View new_view = inflater.inflate(R.layout.dialog_edit_board, null);
+                final EditText title_board = (EditText) new_view.findViewById(R.id.edit_title_board);
+
+                AlertDialog dialog = new AlertDialog.Builder(getContext())
+                        .setTitle(getResources().getString(R.string.new_board_title))
+                        .setView(new_view)
+                        .setPositiveButton(getResources().getText(R.string.create), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                if(Crud.createNewBoard(realm, title_board.getText().toString())){
+                                    Snackbar.make(view, getResources().getText(R.string.edited_info), Snackbar.LENGTH_LONG)
+                                            .setAction(null, null).show();
+                                }else{
+                                    Snackbar.make(view, getResources().getText(R.string.error_info), Snackbar.LENGTH_LONG)
+                                            .setAction(null, null).show();
+                                }
+                            }
+                        })
+                        .setNegativeButton(getResources().getText(R.string.cancel), null)
+                        .create();
+                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                dialog.show();
             }
         });
 

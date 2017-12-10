@@ -5,7 +5,7 @@
 
     <group android:id="@+id/menuBoards"/>
 
-    <group android:orderInCategory="1">
+    <group android:orderInCategory="1" android:id="@+id/optionsBoards">
         <item
             android:id="@+id/edit_boards"
             android:icon="@drawable/ic_view_agenda_black_24dp"

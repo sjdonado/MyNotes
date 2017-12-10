@@ -10,5 +10,22 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="deleteBoardTitle">"Do yo want to delete?"</string>
+    <string name="delete_board_title">Do yo want to delete?</string>
+    <string name="delete_board_title_board">Title:</string>
+    <string name="delete_board_count_notes">Notes:</string>
+    <string name="delete_board_date">Date:</string>
+
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="create">Create</string>
+    <string name="update">Update</string>
+
+    <string name="deleted_info">The board has been deleted successfully</string>
+    <string name="created_info">The board has been created successfully</string>
+    <string name="edited_info">The board has been edited successfully</string>
+    <string name="error_info">Error! This board already exists</string>
+
+    <string name="new_board_title">New board</string>
+    <string name="edit_board_title">Edit board</string>
+
 </resources>

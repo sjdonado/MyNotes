@@ -25,12 +25,14 @@ public class BoardsAdapter extends RecyclerView.Adapter<BoardsAdapter.ViewHolder
     private Context context;
     private List<Board> list;
     private int layout;
-    private OnButtonClickListener listener;
+    private OnButtonClickListener deleteListener;
+    private OnButtonClickListener editListener;
 
-    public BoardsAdapter(List<Board> list, int layout, OnButtonClickListener listener) {
+    public BoardsAdapter(List<Board> list, int layout, OnButtonClickListener deleteListener, OnButtonClickListener editListener) {
         this.list = list;
         this.layout = layout;
-        this.listener = listener;
+        this.deleteListener = deleteListener;
+        this.editListener = editListener;
     }
 
     @Override
@@ -42,7 +44,7 @@ public class BoardsAdapter extends RecyclerView.Adapter<BoardsAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(list.get(position), listener);
+        holder.bind(list.get(position), deleteListener, editListener);
     }
 
     @Override
@@ -54,19 +56,27 @@ public class BoardsAdapter extends RecyclerView.Adapter<BoardsAdapter.ViewHolder
 
         public TextView title;
         public ImageButton deleteBoard;
+        public ImageButton editBoard;
 
         public ViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title_board);
             deleteBoard = (ImageButton) itemView.findViewById(R.id.delete_board);
+            editBoard = (ImageButton) itemView.findViewById(R.id.edit_board);
         }
 
-        public void bind(final Board board, final OnButtonClickListener listener){
+        public void bind(final Board board, final OnButtonClickListener deleteListener, final OnButtonClickListener editListener){
             title.setText(board.getTitle());
             deleteBoard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onButtonClick(board, getLayoutPosition());
+                    deleteListener.onButtonClick(board);
+                }
+            });
+            editBoard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editListener.onButtonClick(board);
                 }
             });
         }
@@ -74,6 +84,6 @@ public class BoardsAdapter extends RecyclerView.Adapter<BoardsAdapter.ViewHolder
     }
 
     public interface OnButtonClickListener{
-        void onButtonClick(Board board, int position);
+        void onButtonClick(Board board);
     }
 }
