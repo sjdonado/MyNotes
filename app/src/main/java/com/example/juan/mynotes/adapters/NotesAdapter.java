@@ -22,11 +22,13 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
     private List<Note> notes;
     private int layout;
     private OnLongClickNoteListener longClickListener;
+    private OnClickListener clickListener;
 
-    public NotesAdapter(List<Note> notes, int layout, OnLongClickNoteListener longClickListener) {
+    public NotesAdapter(List<Note> notes, int layout, OnLongClickNoteListener longClickListener, OnClickListener clickListener) {
         this.notes = notes;
         this.layout = layout;
         this.longClickListener = longClickListener;
+        this.clickListener = clickListener;
     }
 
 
@@ -39,7 +41,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(notes.get(position), longClickListener);
+        holder.bind(notes.get(position), longClickListener, clickListener);
     }
 
     @Override
@@ -59,7 +61,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
             contentNote = (TextView) itemView.findViewById(R.id.content_note);
         }
 
-        public void bind(final Note note, final OnLongClickNoteListener longClickListener){
+        public void bind(final Note note, final OnLongClickNoteListener longClickListener, final OnClickListener clickListener){
             titleNote.setText(note.getTitle());
             contentNote.setText(note.getContent());
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -69,10 +71,20 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
                     return true;
                 }
             });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clickListener.onClick(note);
+                }
+            });
         }
     }
 
     public interface OnLongClickNoteListener{
         void onLongClick(Note note);
+    }
+
+    public interface OnClickListener{
+        void onClick(Note note);
     }
 }

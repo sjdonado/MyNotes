@@ -5,19 +5,19 @@
 
     <group android:id="@+id/menuBoards"/>
 
-    <group android:orderInCategory="1" android:id="@+id/optionsBoards">
+    <group android:orderInCategory="1">
         <item
             android:id="@+id/edit_boards"
             android:icon="@drawable/ic_view_agenda_black_24dp"
-            android:title="Edit Boards" />
+            android:title="@string/manage_boards" />
         <item
             android:id="@+id/backup"
             android:icon="@drawable/ic_backup_black_24dp"
-            android:title="Backup" />
+            android:title="@string/backup" />
         <item
             android:id="@+id/settings_user"
             android:icon="@drawable/ic_settings_black_24dp"
-            android:title="Settings" />
+            android:title="@string/settings" />
     </group>
 
 </menu>

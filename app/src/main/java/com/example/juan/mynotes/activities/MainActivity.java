@@ -108,12 +108,16 @@ public class MainActivity extends AppCompatActivity
                         .replace(R.id.fragments_container, manageBoardFragment)
                         .commit();
                 break;
+            case R.id.backup:
+                break;
+            case R.id.settings_user:
+                break;
             default:
                 if(boards.get(id) != null){
                     Bundle bundle = new Bundle();
                     NotesFragment notesFragment = new NotesFragment();
-                    bundle.putInt("id", id);
-                    bundle.putString("board", new Gson().toJson(realm.copyFromRealm(boards.get(id))));
+                    bundle.putInt("id", boards.get(id).getId());
+//                    bundle.putString("board", new Gson().toJson(realm.copyFromRealm(boards.get(id))));
                     notesFragment.setArguments(bundle);
                     getSupportFragmentManager()
                             .beginTransaction()
@@ -133,8 +137,7 @@ public class MainActivity extends AppCompatActivity
         for(int i = 0; i < boards.size(); i++){
             menu.add(R.id.menuBoards, i, 0, boards.get(i).getTitle()).setIcon(R.drawable.ic_book_black_24dp);
         }
-        menu.setGroupCheckable(R.id.menuBoards, true, true);
-        menu.setGroupCheckable(R.id.optionsBoards, true, true);
+        menu.setGroupCheckable(R.id.menuBoards, true, false);
     }
 
     @Override

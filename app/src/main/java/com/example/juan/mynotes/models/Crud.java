@@ -55,19 +55,24 @@ public class Crud {
 
     //** CRUD Actions NOTE **/
 
-    public static Board createNote(Realm realm, Board board, String title, String content){
+    public static void createNote(Realm realm, Board board, String title, String content){
         realm.beginTransaction();
         board.getNotes().add(new Note(title, content));
         realm.copyToRealmOrUpdate(board);
         realm.commitTransaction();
-        return board;
     }
 
-    public static Board deleteNote(Realm realm, Board board, Note note){
+    public static void deleteNote(Realm realm, Board board, Note note){
         realm.beginTransaction();
         board.getNotes().remove(note);
         realm.copyToRealmOrUpdate(board);
         realm.commitTransaction();
-        return board;
+    }
+
+    public static void editNote(Realm realm, Board board, Note note, int noteId){
+        realm.beginTransaction();
+        board.getNotes().set(noteId, note);
+        realm.copyToRealmOrUpdate(board);
+        realm.commitTransaction();
     }
 }

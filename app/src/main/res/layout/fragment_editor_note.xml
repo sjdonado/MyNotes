@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     android:layout_margin="@dimen/recycler_view_margin"
     android:foreground="?android:attr/selectableItemBackground"
-    card_view:cardCornerRadius="2dp"
-    tools:context="com.example.juan.mynotes.fragments.DetailsFragment">
+    card_view:cardCornerRadius="@dimen/card_view_corner_radius"
+    tools:context="com.example.juan.mynotes.fragments.EditorNoteFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,6 +22,8 @@
             android:background="@android:color/transparent"
             android:hint="Title"
             android:inputType="textCapSentences"
+            android:textSize="20dp"
+            android:textColor="@color/colorPrimaryText"
             android:textStyle="bold" />
 
         <View
@@ -34,26 +36,49 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="10dp"
-            android:layout_weight="0.85"
+            android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:inputType="textCapSentences"
             android:gravity="top"
-            android:hint="Note" />
+            android:hint="Note"
+            android:textColor="@color/colorSecondaryText"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLines="20"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/colorDivider" />
 
-        <Button
-            android:id="@+id/save_note"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_margin="10dp"
-            android:background="@android:color/transparent"
-            android:text="SAVE"
-            android:textColor="@color/colorAccent" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/cancel_note"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="CANCEL"
+                android:textColor="@color/colorAccent" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorDivider" />
+
+            <Button
+                android:id="@+id/save_note"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="SAVE"
+                android:textColor="@color/colorAccent" />
+        </LinearLayout>
 
     </LinearLayout>
 

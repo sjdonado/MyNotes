@@ -3,22 +3,16 @@ package com.example.juan.mynotes.fragments;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.juan.mynotes.R;
 import com.example.juan.mynotes.adapters.NotesAdapter;
@@ -35,7 +29,7 @@ import io.realm.Realm;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NotesFragment extends Fragment{
+public class NotesFragment extends Fragment {
 
     private int id;
     private Board board;
@@ -66,8 +60,8 @@ public class NotesFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                DetailsFragment detailsFragment = new DetailsFragment();
-                bundle.putString("board", new Gson().toJson(board));
+                EditorNoteFragment detailsFragment = new EditorNoteFragment();
+                bundle.putString("board", new Gson().toJson(realm.copyFromRealm(board)));
                 detailsFragment.setArguments(bundle);
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
@@ -81,10 +75,12 @@ public class NotesFragment extends Fragment{
         Bundle bundle = getArguments();
         if(bundle != null){
             id = bundle.getInt("id");
-            board = new Gson().fromJson(bundle.getString("board"), Board.class);
+//            board = new Gson().fromJson(bundle.getString("board"), Board.class);
+            board = realm.where(Board.class).equalTo("id", id).findFirst();
             notes = board.getNotes();
-            getActivity().setTitle(board.getTitle());
         }
+
+        getActivity().setTitle(board.getTitle());
 
         //Instance and recycler
         recyclerView = view.findViewById(R.id.recycler_list_notes);
@@ -111,7 +107,23 @@ public class NotesFragment extends Fragment{
                         .setNegativeButton(getResources().getText(R.string.cancel), null)
                         .show();
             }
+        }, new NotesAdapter.OnClickListener() {
+            @Override
+            public void onClick(Note note) {
+                Bundle bundle = new Bundle();
+                EditorNoteFragment editorNoteFragment = new EditorNoteFragment();
+                bundle.putString("board", new Gson().toJson(realm.copyFromRealm(board)));
+                bundle.putString("note", new Gson().toJson(realm.copyFromRealm(note)));
+                bundle.putInt("noteId", board.getNotes().indexOf(note));
+                editorNoteFragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragments_container, editorNoteFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
         });
+
         recyclerView.setAdapter(adapter);
 
         return view;
