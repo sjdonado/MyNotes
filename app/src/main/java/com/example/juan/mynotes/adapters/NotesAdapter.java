@@ -104,8 +104,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
     }
 
     private List<Note> sortNotes(List<Note> notes){
-        Realm realm = Realm.getDefaultInstance();
-        List<Note> sort = realm.copyFromRealm(notes);
+        List<Note> sort = Realm.getDefaultInstance().copyFromRealm(notes);
         //Sort notes
         Collections.sort(sort, new Comparator<Note>() {
             @Override
@@ -121,7 +120,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
                 }
             }
         });
-        Log.i("SIZE PERRO HPTA", sort.size() + "");
         return sort;
     }
 }

@@ -1,14 +1,18 @@
 package com.example.juan.mynotes.activities;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.juan.mynotes.R;
 import com.example.juan.mynotes.fragments.BoardsFragment;
@@ -68,7 +72,8 @@ public class MainActivity extends AppCompatActivity
                 .add(R.id.fragments_container, notesFragment)
                 .commit();
 
-        if (savedInstanceState != null) return;
+
+//        if (savedInstanceState != null) return;
 
     }
 
@@ -114,6 +119,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragments_container, boardsFragment)
+                        .addToBackStack(null)
                         .commit();
                 break;
             case R.id.backup:
