@@ -3,6 +3,7 @@ package com.example.juan.mynotes.fragments;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -10,9 +11,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.juan.mynotes.R;
 import com.example.juan.mynotes.adapters.NotesAdapter;
@@ -21,9 +24,21 @@ import com.example.juan.mynotes.models.Crud;
 import com.example.juan.mynotes.models.Note;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
+import javax.annotation.Nullable;
+
+import io.realm.ObjectChangeSet;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmModel;
+import io.realm.RealmObjectChangeListener;
 
 
 /**
@@ -87,6 +102,8 @@ public class NotesFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         layoutManager = new LinearLayoutManager(getContext());
+//        layoutManager.scrollToPosition(notes.size() - 1);
+//        recyclerView.scrollToPosition(notes.size() - 1);
         recyclerView.setLayoutManager(layoutManager);
 
         //Instance and config adapter
@@ -95,10 +112,10 @@ public class NotesFragment extends Fragment {
             public void onLongClick(final Note note) {
                 AlertDialog dialog = new AlertDialog.Builder(getContext())
                         .setTitle(getResources().getString(R.string.delete_board_title))
-                        .setMessage(note.getTitle() + " created at " + note.getCreatedAt())
+                        .setMessage(note.getTitle() + " created at " + note.getCreatedAtString())
                         .setPositiveButton(getResources().getText(R.string.delete), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                Crud.deleteNote(realm, board, note);
+                                Crud.deleteNote(realm, note);
                                 adapter.notifyDataSetChanged();
                                 Snackbar.make(view, getResources().getText(R.string.note_deleted_info), Snackbar.LENGTH_LONG)
                                         .setAction("Action", null).show();

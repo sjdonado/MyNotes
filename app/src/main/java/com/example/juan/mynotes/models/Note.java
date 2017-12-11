@@ -53,9 +53,13 @@ public class Note extends RealmObject {
         this.content = content;
     }
 
-    public String getCreatedAt() {
+    public String getCreatedAtString() {
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         return df.format(createdAt);
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
 }

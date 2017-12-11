@@ -1,5 +1,7 @@
 package com.example.juan.mynotes.models;
 
+import android.util.Log;
+
 import java.util.List;
 
 import io.realm.Realm;
@@ -66,10 +68,9 @@ public class Crud {
         realm.commitTransaction();
     }
 
-    public static void deleteNote(Realm realm, Board board, Note note){
+    public static void deleteNote(Realm realm, Note note){
         realm.beginTransaction();
-        board.getNotes().remove(note);
-        realm.copyToRealmOrUpdate(board);
+        note.deleteFromRealm();
         realm.commitTransaction();
     }
 
