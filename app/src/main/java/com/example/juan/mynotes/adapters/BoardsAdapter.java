@@ -27,12 +27,15 @@ public class BoardsAdapter extends RecyclerView.Adapter<BoardsAdapter.ViewHolder
     private int layout;
     private OnButtonClickListener deleteListener;
     private OnButtonClickListener editListener;
+    private OnButtonClickListener itemListener;
 
-    public BoardsAdapter(List<Board> list, int layout, OnButtonClickListener deleteListener, OnButtonClickListener editListener) {
+    public BoardsAdapter(List<Board> list, int layout, OnButtonClickListener deleteListener, OnButtonClickListener editListener,
+                         OnButtonClickListener itemListener) {
         this.list = list;
         this.layout = layout;
         this.deleteListener = deleteListener;
         this.editListener = editListener;
+        this.itemListener = itemListener;
     }
 
     @Override
@@ -44,7 +47,7 @@ public class BoardsAdapter extends RecyclerView.Adapter<BoardsAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(list.get(position), deleteListener, editListener);
+        holder.bind(list.get(position), deleteListener, editListener, itemListener);
     }
 
     @Override
@@ -65,18 +68,30 @@ public class BoardsAdapter extends RecyclerView.Adapter<BoardsAdapter.ViewHolder
             editBoard = (ImageButton) itemView.findViewById(R.id.edit_board);
         }
 
-        public void bind(final Board board, final OnButtonClickListener deleteListener, final OnButtonClickListener editListener){
+        public void bind(final Board board, final OnButtonClickListener deleteListener, final OnButtonClickListener editListener,
+                         final OnButtonClickListener itemListener){
             title.setText(board.getTitle());
-            deleteBoard.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    deleteListener.onButtonClick(board);
-                }
-            });
+            if(board.getId() == 1){
+                deleteBoard.setEnabled(false);
+                deleteBoard.setImageDrawable(itemView.getResources().getDrawable(R.drawable.ic_delete_grey_24dp));
+            }else{
+                deleteBoard.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        deleteListener.onButtonClick(board);
+                    }
+                });
+            }
             editBoard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     editListener.onButtonClick(board);
+                }
+            });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemListener.onButtonClick(board);
                 }
             });
         }

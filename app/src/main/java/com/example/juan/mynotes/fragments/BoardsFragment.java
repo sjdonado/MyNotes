@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.juan.mynotes.R;
+import com.example.juan.mynotes.activities.MainActivity;
 import com.example.juan.mynotes.adapters.BoardsAdapter;
 import com.example.juan.mynotes.models.Board;
 import com.example.juan.mynotes.models.Crud;
@@ -73,7 +74,7 @@ public class BoardsFragment extends Fragment implements RealmChangeListener<Real
                 TextView title = (TextView) dialog_view.findViewById(R.id.dialog_delete_title_board);
                 title.setText(getResources().getText(R.string.delete_board_title_board) + " " + board.getTitle());
                 TextView notesCount = (TextView) dialog_view.findViewById(R.id.dialog_delete_notes_count);
-                notesCount.setText(getResources().getText(R.string.delete_board_count_notes) + " " + board.getNotesSize());
+                notesCount.setText(getResources().getText(R.string.delete_board_count_notes) + " " + board.getNotesSize() + " " + getResources().getText(R.string.delete_board_count_notes_2));
                 TextView date = (TextView) dialog_view.findViewById(R.id.dialog_delete_date);
                 date.setText(getResources().getText(R.string.delete_board_date) + " " + board.getCreatedAt());
 
@@ -102,10 +103,10 @@ public class BoardsFragment extends Fragment implements RealmChangeListener<Real
                         .setView(edit_view)
                         .setPositiveButton(getResources().getText(R.string.update), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                if(Crud.editBoard(realm, title_board.getText().toString(), board)){
+                                if (Crud.editBoard(realm, title_board.getText().toString(), board)) {
                                     Snackbar.make(view, getResources().getText(R.string.edited_info), Snackbar.LENGTH_LONG)
                                             .setAction("Action", null).show();
-                                }else{
+                                } else {
                                     Snackbar.make(view, getResources().getText(R.string.error_info), Snackbar.LENGTH_LONG)
                                             .setAction("Action", null).show();
                                 }
@@ -115,6 +116,19 @@ public class BoardsFragment extends Fragment implements RealmChangeListener<Real
                         .create();
                 dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
                 dialog.show();
+            }
+        }, new BoardsAdapter.OnButtonClickListener() {
+            @Override
+            public void onButtonClick(Board board) {
+                Bundle bundle = new Bundle();
+                NotesFragment notesFragment = new NotesFragment();
+                bundle.putInt("id", board.getId());
+//                    bundle.putString("board", new Gson().toJson(realm.copyFromRealm(boards.get(id))));
+                notesFragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragments_container, notesFragment)
+                        .commit();
             }
         });
 

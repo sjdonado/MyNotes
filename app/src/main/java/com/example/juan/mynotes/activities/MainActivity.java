@@ -58,6 +58,16 @@ public class MainActivity extends AppCompatActivity
         // Instance fragments
         boardsFragment = new BoardsFragment();
 
+        Bundle bundle = new Bundle();
+        NotesFragment notesFragment = new NotesFragment();
+        bundle.putInt("id", boards.get(0).getId());
+//                    bundle.putString("board", new Gson().toJson(realm.copyFromRealm(boards.get(id))));
+        notesFragment.setArguments(bundle);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragments_container, notesFragment)
+                .commit();
+
         if (savedInstanceState != null) return;
 
     }
@@ -141,6 +151,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         setMenu(boards);
+        this.menu.findItem(0).setChecked(true);
         return true;
     }
 

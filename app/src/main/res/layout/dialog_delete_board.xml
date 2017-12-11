@@ -15,7 +15,7 @@
         android:textSize="15dp" />
 
     <TextView
-        android:id="@+id/dialog_delete_notes_count"
+        android:id="@+id/dialog_delete_date"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -24,11 +24,12 @@
         android:paddingLeft="@dimen/activity_horizontal_margin" />
 
     <TextView
-        android:id="@+id/dialog_delete_date"
+        android:id="@+id/dialog_delete_notes_count"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="left"
         android:textSize="15dp"
         android:paddingLeft="@dimen/activity_horizontal_margin" />
+
 </LinearLayout>

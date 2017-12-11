@@ -1,5 +1,7 @@
 package com.example.juan.mynotes.models;
 
+import java.util.List;
+
 import io.realm.Realm;
 
 /**
@@ -35,6 +37,8 @@ public class Crud {
 
     public static void deleteBoard(Realm realm, Board board) {
         realm.beginTransaction();
+        List<Note> notes = board.getNotes();
+        for(int i = 0; i < notes.size(); i++) notes.get(i).deleteFromRealm();
         board.deleteFromRealm();
         realm.commitTransaction();
     }

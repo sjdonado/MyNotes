@@ -77,7 +77,7 @@ public class EditorNoteFragment extends Fragment {
                 String send_content = content.getText().toString();
                 String send_title = title.getText().toString();
                 if(send_title.isEmpty()) send_title = getResources().getString(R.string.unknown_title);
-                if(!send_content.isEmpty() || !send_title.isEmpty()){
+                if(!send_content.isEmpty()){
                     String note_response;
                     if(note == null){
                         Crud.createNote(realm, board, send_title, send_content);
