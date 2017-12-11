@@ -1,8 +1,10 @@
 package com.example.juan.mynotes.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity
         boards = realm.where(Board.class).findAll();
         boards.addChangeListener(this);
 
-        if(boards.isEmpty()) Crud.createNewBoard(realm, "Main Board");
+        if(boards.isEmpty()) Crud.createNewBoard(realm, "Main board");
 
         // Instance fragments
         boardsFragment = new BoardsFragment();
@@ -112,6 +114,7 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        clearBackstack();
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         switch (id){
@@ -123,6 +126,7 @@ public class MainActivity extends AppCompatActivity
                         .commit();
                 break;
             case R.id.backup:
+                startActivity(new Intent(this, BackupActivity.class));
                 break;
             case R.id.settings_user:
                 break;
@@ -164,6 +168,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onChange(RealmResults<Board> boards) {
         setMenu(boards);
+    }
+
+    public void clearBackstack() {
+        if(getFragmentManager().getBackStackEntryCount() > 0){
+            FragmentManager.BackStackEntry entry = getSupportFragmentManager().getBackStackEntryAt(
+                    0);
+            getSupportFragmentManager().popBackStack(entry.getId(),
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            getSupportFragmentManager().executePendingTransactions();
+        }
     }
 
 }

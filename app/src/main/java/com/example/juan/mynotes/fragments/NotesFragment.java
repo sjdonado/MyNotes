@@ -143,7 +143,21 @@ public class NotesFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
 
+        setHideShowFAB(fab, recyclerView);
+
         return view;
+    }
+
+    private void setHideShowFAB(final FloatingActionButton fab, RecyclerView recycler) {
+        recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0)
+                    fab.hide();
+                else if (dy < 0)
+                    fab.show();
+            }
+        });
     }
 
 }
