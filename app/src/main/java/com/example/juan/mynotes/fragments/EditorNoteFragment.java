@@ -33,6 +33,7 @@ public class EditorNoteFragment extends Fragment {
     private InputMethodManager imgr;
     private Note note;
     private int noteId;
+    private boolean swSave;
 
     public EditorNoteFragment() {
         // Required empty public constructor
@@ -46,6 +47,8 @@ public class EditorNoteFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_editor_note, container, false);
 
         realm = Realm.getDefaultInstance();
+
+        swSave = false;
 
         imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -76,6 +79,7 @@ public class EditorNoteFragment extends Fragment {
         view.findViewById(R.id.save_note).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                swSave = true;
                 saveNote(view);
             }
         });
@@ -83,6 +87,7 @@ public class EditorNoteFragment extends Fragment {
         view.findViewById(R.id.cancel_note).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                swSave = true;
                 imgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 getFragmentManager().popBackStack();
             }
@@ -125,7 +130,7 @@ public class EditorNoteFragment extends Fragment {
 
     @Override
     public void onStop() {
-        saveNote(getView());
+        if(!swSave) saveNote(getView());
         super.onStop();
     }
 

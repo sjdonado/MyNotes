@@ -171,12 +171,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void clearBackstack() {
-        if(getFragmentManager().getBackStackEntryCount() > 0){
-            FragmentManager.BackStackEntry entry = getSupportFragmentManager().getBackStackEntryAt(
-                    0);
-            getSupportFragmentManager().popBackStack(entry.getId(),
-                    FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            getSupportFragmentManager().executePendingTransactions();
+        int backStackEntryCount = getSupportFragmentManager()
+                .getBackStackEntryCount();
+
+        for (int i = 0; i < backStackEntryCount; i++) {
+            getSupportFragmentManager().popBackStack();
         }
     }
 
